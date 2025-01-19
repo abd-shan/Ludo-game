@@ -19,22 +19,22 @@ public class Board {
             Square square;
 
             if (i == 1 || i == 14)
-                square = new Square(true, true, false);
+                square = new Square(i, true, true, false);
             else if (i == 9 || i == 22)
-                square = new Square(false, true, false);
+                square = new Square(i, false, true, false);
             else
-                square = new Square(false, false, false);
+                square = new Square(i, false, false, false);
 
             track.add(square);
         }
 
         for (int i = 0; i < 4; i++) {
-            Square playerSquare = new Square(false, false, true);
+            Square playerSquare = new Square(41+i, false, false, true);
             playerSquare.setOwner(Role.Player);
             playerWiningBlocks.add(playerSquare);
 
 
-            Square cpuSquare = new Square(false, false, true);
+            Square cpuSquare = new Square(51+i, false, false, true);
             cpuSquare.setOwner(Role.CPU);
             cpuWiningBlocks.add(cpuSquare);
         }
@@ -73,60 +73,33 @@ public class Board {
         System.out.println();
 
         for (int i = 0; i < 4; i++) {
-            if (this.players[0].tokens[i].currentIndex == -1)
+            if (this.players[0].tokens[i] == -1)
                 System.out.print("🔴");
         }
         System.out.println();
         for (int i = 0; i < 4; i++) {
-            if (this.players[1].tokens[i].currentIndex == -1)
+            if (this.players[1].tokens[i] == -1)
                 System.out.print("🔵");
         }
         System.out.println();
     }
 
-    public boolean checkWinning(){
-        Player player=players[0];
+    public boolean checkWinning() {
+        Player player = players[0];
 
-        if (player.emptyWiningBlocks==0) {
+        if (player.emptyWiningBlocks() == 0) {
             System.out.println("!!!___ Player Wins ___!!!");
             printBoard();
             return true;
         }
-        Player cpu=players[1];
+        Player cpu = players[1];
 
-        if (cpu.emptyWiningBlocks==0) {
+        if (cpu.emptyWiningBlocks() == 0) {
             System.out.println("!!!___ CPU Wins ___!!!");
             printBoard();
             return true;
         }
         return false;
-    }
-
-
-    protected Board clone() {
-        Board clonedBoard = new Board();
-
-        clonedBoard.track = new ArrayList<>();
-        for (Square square : this.track) {
-            clonedBoard.track.add(square.clone());
-        }
-
-        clonedBoard.players = new Player[this.players.length];
-        for (int i = 0; i < this.players.length; i++) {
-            clonedBoard.players[i] = this.players[i].clone();
-        }
-
-        clonedBoard.playerWiningBlocks = new Stack<>();
-        for (Square square : this.playerWiningBlocks) {
-            clonedBoard.playerWiningBlocks.add(square.clone());
-        }
-
-        clonedBoard.cpuWiningBlocks = new Stack<>();
-        for (Square square : this.cpuWiningBlocks) {
-            clonedBoard.cpuWiningBlocks.add(square.clone());
-        }
-
-        return clonedBoard;
     }
 
 

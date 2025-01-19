@@ -23,20 +23,13 @@ public class Play {
         while ( !game.board.checkWinning()) {
 
             diceResult = dice.rollDice();
-//            diceResult = scanner.nextInt();
-
-            if (!game.areTherePossibleMoves(diceResult))
-            {
-                game.switchPlayer();
-                continue;
-            }
-
 
             game.board.printBoard();
 
-            System.out.println(game.board.players[game.currentPlayerIndex].role + "'s turn");
+            System.out.println(game.board.players[game.currentPlayerIndex].getRole() + "'s turn");
 
 
+//            diceResult = scanner.nextInt();
             System.out.println("Your roll result is : " + diceResult);
 
             int option;
@@ -45,17 +38,10 @@ public class Play {
 
             do {
 
-                String moves="Which token do you want to play? \n Your options :     ";
-                if (game.canMove(1,diceResult))
-                    moves+="1  ";
-                if (game.canMove(2,diceResult))
-                    moves+="2  ";
-                if (game.canMove(3,diceResult))
-                    moves+="3  ";
-                if (game.canMove(4,diceResult))
-                    moves+="4  ";
 
-                System.out.println(moves);
+                System.out.print("Which token do you want to play? \n Your options :     ");
+
+                System.out.println(game.possibleMoves(diceResult));
                 option = scanner.nextInt();
 
 

@@ -1,133 +1,157 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game {
     public Board board;
-
-    public int currentPlayerIndex = 0;
+    public int currentPlayerIndex;
 
     public Game(Board board) {
         this.board = board;
+        lastPlayer = board.players[0];
     }
 
+    int row = 0;
+    Player lastPlayer;
+
     public void playMove(int diceResult, int option) {
+
+
         Player currentPlayer = board.players[currentPlayerIndex];
+        Player opponentPlayer = board.players[(currentPlayerIndex + 1) % 2];
 
-        Token currentToken = currentPlayer.tokens[option - 1];
+
+        if (currentPlayer.role != lastPlayer.role) {
+            row = 0;
+            lastPlayer = currentPlayer;
+        }
+
+        if (diceResult == 6)
+            row++;
 
 
-        // cannot move
-        if (currentToken.currentIndex == -1 && diceResult != 6) {
+        int tokenIndex = option - 1;
+
+        if (currentPlayer.getToken(0) == -1 && diceResult != 6) {
             switchPlayer();
-            currentPlayer.sortTokens();
             return;
         }
 
-        int indexBefore = currentToken.currentIndex;
-        int indexAfter; //moving from start index
+
+        int indexBefore = currentPlayer.getToken(tokenIndex);
+        int indexAfter;
         if (indexBefore == -1) {
             indexAfter = currentPlayer.startIndex;
-            currentToken.currentIndex = indexAfter;
-            board.track.get(indexAfter).addToken(board.players[currentPlayerIndex].role, currentToken);
-            currentPlayer.sortTokens();
-            return;
-        }
 
+            boolean kill = false;
+            if (board.track.get(indexAfter).getOwner() == opponentPlayer.role) {
+                opponentPlayer.sendHome(indexAfter);
+                kill = true;
+            }
 
-        //enter winning zone
-        if (indexBefore + diceResult == currentPlayer.endIndex + currentPlayer.emptyWiningBlocks && indexBefore <= currentPlayer.endIndex) {
-            currentToken = board.track.get(indexBefore).removeToken(currentPlayer.endIndex + currentPlayer.emptyWiningBlocks);
-            currentToken.currentIndex = 30;
-            currentPlayer.emptyWiningBlocks--;
-            Stack<Square> r;
-            if (currentPlayer.role == Role.Player)
-                r = board.playerWiningBlocks;
-            else
-                r = board.cpuWiningBlocks;
+            currentPlayer.sendTo(indexBefore, indexAfter);
+            board.track.get(indexAfter).updateSquare(board.players);
 
-
-            for (int i = 0; i < 4; i++) {
-                if (r.get(i).isEmpty) {
-                    r.get(i).isEmpty = false;
-                    break;
-                }
+            if ((diceResult != 6 && !kill) || row == 3) {
+                switchPlayer();
             }
             return;
         }
 
-        //regular moving
-        indexAfter = (indexBefore + diceResult) % 26;
-        currentToken = board.track.get(indexBefore).removeToken(indexAfter);//
-//        currentToken.currentIndex = indexAfter;
-        board.track.get(indexAfter).addToken(board.players[currentPlayerIndex].role, currentToken);
 
+        if (indexBefore + diceResult == currentPlayer.endIndex + currentPlayer.emptyWiningBlocks() && indexBefore <= currentPlayer.endIndex) {
+            indexAfter = indexBefore + diceResult;
+            Stack<Square> winingBlocks;
 
-        if (diceResult != 6) {
-            switchPlayer();
+            if (currentPlayerIndex == 0) {
+                winingBlocks = board.playerWiningBlocks;
+                int i;
+                for (i = 0; i < 4; i++) {
+                    if (winingBlocks.get(i).isEmpty()) {
+                        indexAfter = 41 + i;
+                        break;
+                    }
+                }
+                currentPlayer.sendTo(indexBefore, indexAfter);
+                board.track.get(indexBefore).updateSquare(board.players);
+                winingBlocks.get(i).updateSquare(board.players);
+            } else if (currentPlayerIndex == 1) {
+                winingBlocks = board.cpuWiningBlocks;
+                int i;
+                for (i = 0; i < 4; i++) {
+                    if (winingBlocks.get(i).isEmpty()) {
+                        indexAfter = 51 + i;
+                        break;
+                    }
+                }
+                currentPlayer.sendTo(indexBefore, indexAfter);
+                board.track.get(indexBefore).updateSquare(board.players);
+                winingBlocks.get(i).updateSquare(board.players);
+            }
+
+            if (diceResult != 6 || row == 3) {
+                switchPlayer();
+            }
+            return;
         }
 
 
-        currentPlayer.sortTokens();
-        return;
+        indexAfter = (indexBefore + diceResult) % 26;
+        boolean kill = false;
+        if (board.track.get(indexAfter).getOwner() == opponentPlayer.role) {
+            opponentPlayer.sendHome(indexAfter);
+            kill = true;
+        }
+
+        currentPlayer.sendTo(indexBefore, indexAfter);
+        board.track.get(indexBefore).updateSquare(board.players);
+        board.track.get(indexAfter).updateSquare(board.players);
+
+        if ((diceResult != 6 && !kill) || row == 3) {
+            switchPlayer();
+        }
     }
 
     public void switchPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % 2;
     }
 
-
     public boolean canMove(int option, int diceResult) {
+
         if (option < 1 || option > 4)
             return false;
 
         if (option > 1 && howManyTokensOut() == 4)
             return false;
 
-//        {
-//            int currentTokenIndex = board.players[currentPlayerIndex].tokens[option - 1].currentIndex;
-//            if (currentTokenIndex == -1 && diceResult != 6) {
-////                switchPlayer();
-//                return false;
-//            }
-//        }
+
+        int indexBefore = board.players[currentPlayerIndex].tokens[option - 1];
+        if (indexBefore > 30)
+            return false;
 
 
-        {
-            int currentTokenIndex = board.players[currentPlayerIndex].tokens[option - 1].currentIndex;
-            if (currentTokenIndex == 30)
-                return false;
-        }
+        indexBefore = board.players[currentPlayerIndex].tokens[option - 1];
+        if (indexBefore != -1) {
+            int indexAfter = indexBefore + diceResult;
 
-
-        {
-            int indexBefore = board.players[currentPlayerIndex].tokens[option - 1].currentIndex;
-            if (indexBefore != -1) {
-                int indexAfter = indexBefore + diceResult;
-
-                for (int i = indexBefore + 1; i < indexAfter; i++) {
-                    try {
-                        if (board.track.get(i).isWall)
-                            return false;
-                    } catch (Exception e) {
-                        i = 0;
-                        indexAfter -= 26;
-                    }
+            for (int i = indexBefore + 1; i < indexAfter; i++) {
+                try {
+                    if (board.track.get(i).isWall())
+                        return false;
+                } catch (Exception e) {
+                    i = 0;
+                    indexAfter -= 26;
                 }
-
             }
 
-
         }
 
-        {
-            int indexBefore = board.players[currentPlayerIndex].tokens[option - 1].currentIndex;
-            int indexAfter = (indexBefore + diceResult) % 26;
-            Square after = board.track.get(indexAfter);
-            if (after.isSpecial && !after.isEmpty && after.getOwner() != board.players[currentPlayerIndex].role)
-                return false;
-        }
 
+        int indexAfter = (indexBefore + diceResult) % 26;
+        Square after = board.track.get(indexAfter);
+        if (after.isSpecial && !after.isEmpty() && after.getOwner() != board.players[currentPlayerIndex].role)
+            return false;
 
 
         if (option == 1 && howManyTokensOut() == 4)
@@ -139,25 +163,32 @@ public class Game {
             return false;
         }
 
+
         return true;
     }
-
-    public boolean areTherePossibleMoves(int diceResult) {
-        for (int i = 1; i <= 4; i++) {
-            if (canMove(i, diceResult))
-                return true;
-        }
-        return false;
-    }
-
 
     private int howManyTokensOut() {
         int count = 0;
         for (int i = 0; i < 4; i++) {
-            if (board.players[currentPlayerIndex].tokens[i].currentIndex == -1)
+            if (board.players[currentPlayerIndex].tokens[i] == -1)
                 count++;
         }
         return count;
+    }
+
+    public boolean areTherePossibleMoves(int diceResult) {
+        if (possibleMoves(diceResult).isEmpty())
+            return false;
+        return true;
+    }
+
+    public ArrayList<Integer> possibleMoves(int diceResult) {
+        ArrayList<Integer> possibleMoves = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            if (canMove(i, diceResult))
+                possibleMoves.add(i);
+        }
+        return possibleMoves;
     }
 
 }

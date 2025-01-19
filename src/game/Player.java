@@ -1,58 +1,94 @@
 package game;
 
+import java.util.Arrays;
+
 public class Player {
-    public Role role;
-    int startIndex;
-    int endIndex;
-    int emptyWiningBlocks = 4;
-    Token[] tokens = new Token[4];
+    final Role role;
+    final int startIndex;
+    final int endIndex;
+
+
+    int[] tokens = new int[]{-1, -1, -1, -1};
+
 
     public Player(Role role, int startIndex, int endIndex) {
         this.role = role;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
+    }
 
+    public void sendTo(int before, int after) {
         for (int i = 0; i < 4; i++) {
-            Token token = new Token(role);
-            tokens[i] = token;
+            if (tokens[i] == before) {
+                tokens[i] = after;
+                break;
+            }
         }
+        sortTokens();
+    }
+
+    public void sendHome(int value) {
+        for (int i = 0; i < 4; i++) {
+            if (tokens[i] == value) {
+                tokens[i] = -1;
+            }
+        }
+        sortTokens();
     }
 
     public void sortTokens() {
-        for (int i = 0; i < tokens.length; i++) {
-            for (int j = 0; j < tokens.length - 1; j++) {
+        if (role == Role.Player) {
+            Arrays.sort(tokens);
+            for (int i = 0; i < 2; i++) {
+                int temp = tokens[i];
+                tokens[i] = tokens[3 - i];
+                tokens[3 - i] = temp;
+            }
+        } else {
+            for (int i = 0; i < tokens.length; i++) {
+                for (int j = 0; j < tokens.length - 1; j++) {
 
-                int a, b;
-                a = tokens[j].currentIndex;
-                b = tokens[j + 1].currentIndex;
+                    int a, b;
+                    a = tokens[j];
+                    b = tokens[j + 1];
 
-                if (role == Role.CPU) {
+
                     if (a > -1 && a < 12)
                         a += 26;
                     if (b > -1 && b < 12)
                         b += 26;
-                }
 
-                if (a < b) {
-                    Token temp = tokens[j];
-                    tokens[j] = tokens[j + 1];
-                    tokens[j + 1] = temp;
+                    if (a < b) {
+                        int temp = tokens[j];
+                        tokens[j] = tokens[j + 1];
+                        tokens[j + 1] = temp;
+                    }
                 }
             }
+
         }
     }
 
-    public Player clone() {
-        Player clone = new Player(role, startIndex, endIndex);
+    public int getToken(int index) {
+        return tokens[index];
+    }
 
-        clone.emptyWiningBlocks = emptyWiningBlocks;
+    public Role getRole() {
+        return role;
+    }
 
-        Token[] clonedTokens = new Token[4];
+    public int[] getTokens() {
+        return tokens;
+    }
+
+    public int emptyWiningBlocks() {
+        int emptyWiningBlocks = 0;
         for (int i = 0; i < 4; i++) {
-            clonedTokens[i] = tokens[i].clone();
+            if (tokens[i] != 30) {
+                emptyWiningBlocks++;
+            }
         }
-        clone.tokens = clonedTokens;
-        return clone;
+        return emptyWiningBlocks;
     }
 
 }
