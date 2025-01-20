@@ -24,19 +24,13 @@ public class Play {
 
             diceResult = dice.rollDice();
 
-            if(!game.areTherePossibleMoves(diceResult)){
-                System.out.println("can't move");
-                game.switchPlayer();
-                continue;
-            }
-
 
             game.board.printBoard();
 
             System.out.println(game.board.players[game.currentPlayerIndex].getRole() + "'s turn");
 
 
-//            diceResult = scanner.nextInt();
+            diceResult = scanner.nextInt();
             System.out.println("Your roll result is : " + diceResult);
 
             int option;
@@ -52,7 +46,7 @@ public class Play {
                 option = scanner.nextInt();
 
 
-                canMove = game.canMove(option, diceResult);
+                canMove = game.canMove(option, diceResult,false);
                 if (!canMove) {
                     System.out.println("You can't play this move?");
                 }

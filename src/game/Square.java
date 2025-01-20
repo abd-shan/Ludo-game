@@ -27,12 +27,12 @@ public class Square {
 
 
         if (isEmpty() && owner == Role.Player && isWinning) {
-//            return "\uD83D\uDD38";  //Red diamond
-            return "\uD83D\uDFE5";  //Red square
+            return "\uD83D\uDD38";  //Red diamond
+//            return "\uD83D\uDFE5";  //Red square
         }
         if (isEmpty() && owner == Role.CPU && isWinning) {
-//            return "\uD83D\uDD39";  //Blue diamond
-            return "\uD83D\uDFE6";  //Blue square
+            return "\uD83D\uDD39";  //Blue diamond
+//            return "\uD83D\uDFE6";  //Blue square
         }
 
 

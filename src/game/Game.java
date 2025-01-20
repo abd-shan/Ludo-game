@@ -14,7 +14,12 @@ public class Game {
     int row = 0;
     Player lastPlayer;
 
-    public void playMove(int diceResult, int option) {
+    public boolean playMove(int diceResult, int option) {
+
+        if (!canMove(option, diceResult, true)) {
+            switchPlayer();
+            return false;
+        }
 
 
         Player currentPlayer = board.players[currentPlayerIndex];
@@ -34,7 +39,7 @@ public class Game {
 
         if (currentPlayer.getToken(0) == -1 && diceResult != 6) {
             switchPlayer();
-            return;
+            return false;
         }
 
 
@@ -55,7 +60,7 @@ public class Game {
             if ((diceResult != 6 && !kill) || row == 3) {
                 switchPlayer();
             }
-            return;
+            return true;
         }
 
 
@@ -92,7 +97,7 @@ public class Game {
             if (diceResult != 6 || row == 3) {
                 switchPlayer();
             }
-            return;
+            return true;
         }
 
 
@@ -110,13 +115,18 @@ public class Game {
         if ((diceResult != 6 && !kill) || row == 3) {
             switchPlayer();
         }
+        return true;
     }
 
     public void switchPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % 2;
     }
 
-    public boolean canMove(int option, int diceResult) {
+    public boolean canMove(int option, int diceResult, boolean really) { //error
+
+        if (!really && option == 1 && !canMove(2, diceResult, true) && !canMove(3, diceResult, true) && !canMove(4, diceResult, true))
+            return true;
+
 
         if (option < 1 || option > 4)
             return false;
@@ -148,13 +158,15 @@ public class Game {
 
 
         int indexAfter = (indexBefore + diceResult) % 26;
+        if (indexBefore == -1)
+            indexAfter = board.players[currentPlayerIndex].startIndex;
         Square after = board.track.get(indexAfter);
         if (after.isSpecial && !after.isEmpty() && after.getOwner() != board.players[currentPlayerIndex].role)
             return false;
 
 
-        if (option == 1 && howManyTokensOut() == 4)
-            return true;
+//        if (option == 1 && howManyTokensOut() == 4)
+//            return true;
 
         if (option + howManyTokensOut() > 4) {
             if (option + howManyTokensOut() == 5 && diceResult == 6)
@@ -184,7 +196,7 @@ public class Game {
     public ArrayList<Integer> possibleMoves(int diceResult) {
         ArrayList<Integer> possibleMoves = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
-            if (canMove(i, diceResult))
+            if (canMove(i, diceResult, false))
                 possibleMoves.add(i);
         }
         return possibleMoves;

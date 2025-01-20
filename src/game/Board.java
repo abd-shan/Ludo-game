@@ -18,7 +18,7 @@ public class Board {
             Square square;
 
             if (i == 1 || i == 14)
-                square = new Square(i, true, true, false);
+                square = new Square(i, true, false, false);
             else if (i == 9 || i == 22)
                 square = new Square(i, false, true, false);
             else
