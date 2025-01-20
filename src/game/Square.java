@@ -25,14 +25,15 @@ public class Square {
     @Override
     public String toString() {
 
-//        return "|"+id+"|";
 
-        String output = "";
-
-        if (isEmpty() && owner == Role.Player && isWinning)
-            return "\uD83D\uDD38";
-        if (isEmpty() && owner == Role.CPU && isWinning)
-            return "\uD83D\uDD39";
+        if (isEmpty() && owner == Role.Player && isWinning) {
+//            return "\uD83D\uDD38";  //Red diamond
+            return "\uD83D\uDFE5";  //Red square
+        }
+        if (isEmpty() && owner == Role.CPU && isWinning) {
+//            return "\uD83D\uDD39";  //Blue diamond
+            return "\uD83D\uDFE6";  //Blue square
+        }
 
 
         if (owner == Role.Player && isWall())
@@ -55,17 +56,16 @@ public class Square {
         if (isEmpty())
             return "⬜\uFE0F";
 
-        return output;
+        return "|" + id + "|";
     }
 
     public void updateSquare(Player[] players) {
         tokensContained = 0;
-        this.owner=null;
+        this.owner = null;
         for (Player player : players) {
-            for (int token:player.getTokens()) {
-                if (token==this.id)
-                {
-                    this.owner=player.role;
+            for (int token : player.getTokens()) {
+                if (token == this.id) {
+                    this.owner = player.role;
                     tokensContained++;
                 }
             }
@@ -90,6 +90,13 @@ public class Square {
 
     public int getTokensContained() {
         return tokensContained;
+    }
+
+    public Square clone() {
+        Square cloned = new Square(this.id, this.isStart, this.isSpecial, this.isWinning);
+        cloned.tokensContained = this.tokensContained;
+        cloned.owner = this.owner;
+        return cloned;
     }
 
 }

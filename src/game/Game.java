@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Game {
     public Board board;
@@ -62,7 +61,7 @@ public class Game {
 
         if (indexBefore + diceResult == currentPlayer.endIndex + currentPlayer.emptyWiningBlocks() && indexBefore <= currentPlayer.endIndex) {
             indexAfter = indexBefore + diceResult;
-            Stack<Square> winingBlocks;
+            ArrayList<Square> winingBlocks;
 
             if (currentPlayerIndex == 0) {
                 winingBlocks = board.playerWiningBlocks;
@@ -189,6 +188,17 @@ public class Game {
                 possibleMoves.add(i);
         }
         return possibleMoves;
+    }
+
+    public Game clone() {
+        Game clonedGame = new Game(this.board.clone());
+
+        clonedGame.currentPlayerIndex = this.currentPlayerIndex;
+        clonedGame.row = this.row;
+
+        clonedGame.lastPlayer = this.lastPlayer.clone();
+
+        return clonedGame;
     }
 
 }

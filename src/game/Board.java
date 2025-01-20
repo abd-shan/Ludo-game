@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Board {
 
@@ -9,8 +8,8 @@ public class Board {
 
     public Player[] players = {new Player(Role.Player, 1, 25), new Player(Role.CPU, 14, 12)};
 
-    Stack<Square> playerWiningBlocks = new Stack<>();
-    Stack<Square> cpuWiningBlocks = new Stack<>();
+    ArrayList<Square> playerWiningBlocks = new ArrayList<>();
+    ArrayList<Square> cpuWiningBlocks = new ArrayList<>();
 
 
     public Board() {
@@ -29,12 +28,12 @@ public class Board {
         }
 
         for (int i = 0; i < 4; i++) {
-            Square playerSquare = new Square(41+i, false, false, true);
+            Square playerSquare = new Square(41 + i, false, false, true);
             playerSquare.setOwner(Role.Player);
             playerWiningBlocks.add(playerSquare);
 
 
-            Square cpuSquare = new Square(51+i, false, false, true);
+            Square cpuSquare = new Square(51 + i, false, false, true);
             cpuSquare.setOwner(Role.CPU);
             cpuWiningBlocks.add(cpuSquare);
         }
@@ -102,5 +101,31 @@ public class Board {
         return false;
     }
 
+    public Board clone() {
+        Board cloned = new Board();
+
+
+        cloned.players = new Player[players.length];
+        for (int i = 0; i < players.length; i++) {
+            cloned.players[i] = players[i].clone();
+        }
+
+        cloned.track = new ArrayList<>(track.size());
+        for (Square square : track) {
+            cloned.track.add(square.clone());
+        }
+
+        cloned.playerWiningBlocks = new ArrayList<>(playerWiningBlocks.size());
+        for (Square square : playerWiningBlocks) {
+            cloned.playerWiningBlocks.add(square.clone());
+        }
+
+        cloned.cpuWiningBlocks = new ArrayList<>(cpuWiningBlocks.size());
+        for (Square square : cpuWiningBlocks) {
+            cloned.cpuWiningBlocks.add(square.clone());
+        }
+
+        return cloned;
+    }
 
 }

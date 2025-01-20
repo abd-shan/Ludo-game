@@ -91,4 +91,15 @@ public class Player {
         return emptyWiningBlocks;
     }
 
+    public Player clone() {
+
+        int[] tokensCopy = new int[tokens.length];
+        System.arraycopy(tokens, 0, tokensCopy, 0, tokens.length);
+
+        Player cloned = new Player(this.role, this.startIndex, this.endIndex);
+        cloned.tokens = tokensCopy;
+
+        return cloned;
+    }
+
 }
