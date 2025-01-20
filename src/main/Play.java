@@ -24,6 +24,13 @@ public class Play {
 
             diceResult = dice.rollDice();
 
+            if(!game.areTherePossibleMoves(diceResult)){
+                System.out.println("can't move");
+                game.switchPlayer();
+                continue;
+            }
+
+
             game.board.printBoard();
 
             System.out.println(game.board.players[game.currentPlayerIndex].getRole() + "'s turn");
