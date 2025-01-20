@@ -20,7 +20,7 @@ public class Play {
         Scanner scanner = new Scanner(System.in);
 
 
-        while ( !game.board.checkWinning()) {
+        while (!game.board.checkWinning()) {
 
             diceResult = dice.rollDice();
 
@@ -30,7 +30,7 @@ public class Play {
             System.out.println(game.board.players[game.currentPlayerIndex].getRole() + "'s turn");
 
 
-            diceResult = scanner.nextInt();
+//            diceResult = scanner.nextInt();
             System.out.println("Your roll result is : " + diceResult);
 
             int option;
@@ -43,10 +43,16 @@ public class Play {
                 System.out.print("Which token do you want to play? \n Your options :     ");
 
                 System.out.println(game.possibleMoves(diceResult));
-                option = scanner.nextInt();
 
 
-                canMove = game.canMove(option, diceResult,false);
+//                var p=game.possibleMoves(diceResult);// { cheat
+//                if (p.size() == 1) {
+//                    option = p.get(0);
+//                } else
+                    option = scanner.nextInt();
+
+
+                canMove = game.canMove(option, diceResult, false);
                 if (!canMove) {
                     System.out.println("You can't play this move?");
                 }
