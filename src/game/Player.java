@@ -53,9 +53,9 @@ public class Player {
                     b = tokens[j + 1];
 
 
-                    if (a > -1 && a < 12)
+                    if (a > -1 && a <= 12)
                         a += 26;
-                    if (b > -1 && b < 12)
+                    if (b > -1 && b <= 12)
                         b += 26;
 
                     if (a < b) {
@@ -84,7 +84,7 @@ public class Player {
     public int emptyWiningBlocks() {
         int emptyWiningBlocks = 0;
         for (int i = 0; i < 4; i++) {
-            if (tokens[i] != 30) {
+            if (tokens[i] < 30) {
                 emptyWiningBlocks++;
             }
         }

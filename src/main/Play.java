@@ -30,7 +30,7 @@ public class Play {
             System.out.println(game.board.players[game.currentPlayerIndex].getRole() + "'s turn");
 
 
-            diceResult = scanner.nextInt();
+//            diceResult = scanner.nextInt();
             System.out.println("Your roll result is : " + diceResult);
 
             int option;

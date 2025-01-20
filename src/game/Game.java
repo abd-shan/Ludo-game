@@ -17,7 +17,11 @@ public class Game {
     public boolean playMove(int diceResult, int option) {
 
         if (!canMove(option, diceResult, true)) {
-            switchPlayer();
+            if (canMove(1, diceResult, true) || canMove(2, diceResult, true) || canMove(3, diceResult, true) || canMove(4, diceResult, true)) {
+                return false;
+            }
+            if (option == 1)
+                switchPlayer();
             return false;
         }
 
@@ -140,7 +144,15 @@ public class Game {
             return false;
 
 
-        indexBefore = board.players[currentPlayerIndex].tokens[option - 1];
+        Player currentPlayer = board.players[currentPlayerIndex];
+        if (indexBefore + diceResult == currentPlayer.endIndex + currentPlayer.emptyWiningBlocks() && indexBefore <= currentPlayer.endIndex) {
+            return true;
+        }
+
+
+
+
+            indexBefore = board.players[currentPlayerIndex].tokens[option - 1];
         if (indexBefore != -1) {
             int indexAfter = indexBefore + diceResult;
 
@@ -164,9 +176,6 @@ public class Game {
         if (after.isSpecial && !after.isEmpty() && after.getOwner() != board.players[currentPlayerIndex].role)
             return false;
 
-
-//        if (option == 1 && howManyTokensOut() == 4)
-//            return true;
 
         if (option + howManyTokensOut() > 4) {
             if (option + howManyTokensOut() == 5 && diceResult == 6)
