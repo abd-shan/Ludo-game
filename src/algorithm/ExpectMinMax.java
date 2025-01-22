@@ -6,6 +6,8 @@ import game.Player;
 import game.Role;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ExpectMinMax {
     Game game;
@@ -99,6 +101,7 @@ public class ExpectMinMax {
     private double scorePlayer(Player player) {
         double score = 0;
 
+
             for (int token : player.getTokens()) {
                 if (token > 0) {
                     score += 500;
@@ -124,11 +127,24 @@ public class ExpectMinMax {
                 if (player.emptyWiningBlocks() < 4) {
                     score += (4 - player.emptyWiningBlocks()) * 1000;
                 }
+                if (isWall(player.getTokens()))
+                    score += 20;
+
+
             }
 
         return score;
     }
 
+    boolean isWall(int[] tokens){
+        Set<Integer> set = new HashSet<>();
+        for (int token : tokens) {
+            if (set.contains(token))
+                return true;
+            set.add(token);
+        }
+        return false;
+    }
 
     boolean isSave(int token) {
         return token == 22 || token == 9;
