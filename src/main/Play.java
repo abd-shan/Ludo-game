@@ -33,8 +33,8 @@ public class Play {
 
 
 //            diceResult = scanner.nextInt();
-            if (game.board.players[game.currentPlayerIndex].getRole()== Role.CPU)
-            System.out.println("CPU roll result is : " + diceResult);
+            if (game.board.players[game.currentPlayerIndex].getRole() == Role.CPU)
+                System.out.println("CPU roll result is : " + diceResult);
             else
                 System.out.println("Your roll result is : " + diceResult);
 
@@ -46,24 +46,22 @@ public class Play {
                 ExpectMinMax AIPlayer = new ExpectMinMax(game);
 
 
-
-                if (game.board.players[game.currentPlayerIndex].getRole()== Role.Player) {
+                if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
                     System.out.print("Which token do you want to play? \n Your options :     ");
                     System.out.println(game.possibleMoves(diceResult));
                     option = scanner.nextInt();
-                }
-                else {
-                    System.out.println("CPU choose:    " + AIPlayer.bestOption(game.possibleMoves(diceResult)) +
-                            "\nfrom his options:    " + game.possibleMoves(diceResult));
+                } else {
+                    int bestOption = AIPlayer.bestOption(game.possibleMoves(diceResult));
+
+                    System.out.println("CPU choose:\t" + bestOption +"\nfrom his options:\t" + game.possibleMoves(diceResult));
 //                    System.out.println("the score:  "+AIPlayer.evaluateGame(game));
 
-                    option=AIPlayer.bestOption(game.possibleMoves(diceResult));
+                    option = bestOption;
                 }
 //                var p=game.possibleMoves(diceResult);// { cheat
 //                if (p.size() == 1) {
 //                    option = p.get(0);
 //                } else
-
 
 
                 canMove = game.canMove(option, diceResult, false);
