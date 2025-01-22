@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Game {
     public Board board;
     public int currentPlayerIndex;
+    public Game father;
 
     public Game(Board board) {
         this.board = board;
@@ -203,6 +204,7 @@ public class Game {
     }
 
     public ArrayList<Integer> possibleMoves(int diceResult) {
+
         ArrayList<Integer> possibleMoves = new ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             if (canMove(i, diceResult, false))
