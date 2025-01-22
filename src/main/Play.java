@@ -74,7 +74,10 @@ public class Play {
 
 
         }
-        System.out.println("!!!___" + game.board.players[game.currentPlayerIndex].getRole() + " Wins ___!!!");
+        if (game.board.players[game.currentPlayerIndex].emptyWiningBlocks()==0)
+        System.out.println(STR."!!!___\{game.board.players[game.currentPlayerIndex].getRole()} Wins ___!!!");
+        else
+            System.out.println(STR."!!!___\{game.board.players[(game.currentPlayerIndex + 1) % 2].getRole()} Wins ___!!!");
         game.board.printBoard();
 
 

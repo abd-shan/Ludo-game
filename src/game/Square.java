@@ -56,7 +56,7 @@ public class Square {
         if (isEmpty())
             return "⬜\uFE0F";
 
-        return "|" + id + "|";
+        return STR."|\{id < 10 ? (STR."\{id} ") : id}|";
     }
 
     public void updateSquare(Player[] players) {

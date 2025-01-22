@@ -57,7 +57,7 @@ public class ExpectMinMax {
                 double probability = 1.0 / 6;
                 Game childGame = simulateGame(option, diceRoll, game);
 
-//                    String nextNodeType = (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) ? "Min" : "Max";
+                    String nextNodeType = (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) ? "Min" : "Max";
                 expectedValue += probability * expectiminimax(childGame, resultDice, depth - 1, false, option);
             }
 
@@ -100,40 +100,30 @@ public class ExpectMinMax {
 
     private double scorePlayer(Player player) {
         double score = 0;
-
-
             for (int token : player.getTokens()) {
                 if (token > 0) {
                     score += 700;
-
                     if (player.getRole() == Role.Player) {
                         score += token ;
-                        if (token >=23-(4-player.emptyWiningBlocks()) && token <=25)
-                            score += 400 ;
-
+                        if (token >=23-(4-player.emptyWiningBlocks()) && token <=25) //هون  0_0
+                            score += 1000 ;
                     } else {
                         if (token <= 12)
                             score += (token + 12) ;
                         else
                             score += (token - 12) ;
-                        if (token >=10-(4-player.emptyWiningBlocks()) && token <=12)
-                            score += 400 ;
+                        if (token >=10-(4-player.emptyWiningBlocks()) && token <=12) //هون  0_0
+                            score += 1000 ;
                     }
-
                 }
                 if (isSave(token)) {
                     score += 20;
                 }
-
                 if (player.emptyWiningBlocks() < 4) {
-                    score += (4 - player.emptyWiningBlocks()) * 1000;
+                    score += (4 - player.emptyWiningBlocks()) * 1500;
                 }
-                if (isWall(player.getTokens()))
-                    score += 10;
-
-
+//                if (isWall(player.getTokens())) score += 10;
             }
-
         return score;
     }
 
