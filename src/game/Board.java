@@ -87,15 +87,11 @@ public class Board {
         Player player = players[0];
 
         if (player.emptyWiningBlocks() == 0) {
-            System.out.println("!!!___ Player Wins ___!!!");
-            printBoard();
             return true;
         }
         Player cpu = players[1];
 
         if (cpu.emptyWiningBlocks() == 0) {
-            System.out.println("!!!___ CPU Wins ___!!!");
-            printBoard();
             return true;
         }
         return false;

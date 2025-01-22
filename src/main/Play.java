@@ -46,23 +46,23 @@ public class Play {
                 ExpectMinMax AIPlayer = new ExpectMinMax(game);
 
 
-                if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
-                    System.out.print("Which token do you want to play? \n Your options :     ");
-                    System.out.println(game.possibleMoves(diceResult));
-                    option = scanner.nextInt();
-                } else {
-                    int bestOption = AIPlayer.bestOption(game.possibleMoves(diceResult));
-
-                    System.out.println("CPU choose:\t" + bestOption +"\nfrom his options:\t" + game.possibleMoves(diceResult));
-//                    System.out.println("the score:  "+AIPlayer.evaluateGame(game));
-
-                    option = bestOption;
-                }
-//                var p=game.possibleMoves(diceResult);// { cheat
+//                var p = game.possibleMoves(diceResult);// { cheat
 //                if (p.size() == 1) {
 //                    option = p.get(0);
-//                } else
+//                } else {
+                    if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
+                        System.out.print("Which token do you want to play? \n Your options :     ");
+                        System.out.println(game.possibleMoves(diceResult));
+                        option = scanner.nextInt();
+                    } else {
+                        int bestOption = AIPlayer.bestOption(game.possibleMoves(diceResult));
 
+                        System.out.println("CPU choose:\t" + bestOption + "\nfrom his options:\t" + game.possibleMoves(diceResult));
+//                    System.out.println("the score:  "+AIPlayer.evaluateGame(game));
+
+                        option = bestOption;
+                    }
+//                }
 
                 canMove = game.canMove(option, diceResult, false);
                 if (!canMove) {
@@ -74,6 +74,8 @@ public class Play {
 
 
         }
+        System.out.println("!!!___" + game.board.players[game.currentPlayerIndex].getRole() + " Wins ___!!!");
+        game.board.printBoard();
 
 
     }
