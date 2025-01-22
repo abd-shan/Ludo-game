@@ -104,19 +104,20 @@ public class ExpectMinMax {
 
             for (int token : player.getTokens()) {
                 if (token > 0) {
-                    score += 500;
+                    score += 700;
+
                     if (player.getRole() == Role.Player) {
                         score += token ;
-                        if (token >=23 && token <=25)
-                            score += 200 ;
+                        if (token >=23-(4-player.emptyWiningBlocks()) && token <=25)
+                            score += 400 ;
 
                     } else {
                         if (token <= 12)
                             score += (token + 12) ;
                         else
                             score += (token - 12) ;
-                        if (token >=10 && token <=12)
-                            score += 200 ;
+                        if (token >=10-(4-player.emptyWiningBlocks()) && token <=12)
+                            score += 400 ;
                     }
 
                 }
