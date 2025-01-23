@@ -31,16 +31,16 @@ public class ExpectMinMax {
                 double minMax=expectiminimax(simulatedGame, dice, DEPTH, true, move);
                 double score = (1.0 / 6) * minMax;
                 totalScore += score;
-                System.out.println(minMax);
+//                System.out.println(minMax);
             }
 
             if (totalScore > bestScore) {
                 bestScore = totalScore;
                 bestMove = move;
             }
-            System.out.println("totalScore: " + totalScore);
+//            System.out.println("totalScore: " + totalScore);
         }
-        System.out.println("bestMove: " + bestScore);
+//        System.out.println("bestMove: " + bestScore);
 
         return bestMove;
     }

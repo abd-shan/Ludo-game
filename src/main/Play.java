@@ -1,10 +1,7 @@
 package main;
 
 import algorithm.ExpectMinMax;
-import game.Board;
-import game.Dice;
-import game.Game;
-import game.Role;
+import game.*;
 
 import java.util.Scanner;
 
@@ -46,23 +43,22 @@ public class Play {
                 ExpectMinMax AIPlayer = new ExpectMinMax(game);
 
 
-//                var p = game.possibleMoves(diceResult);// { cheat
-//                if (p.size() == 1) {
-//                    option = p.get(0);
-//                } else {
-                    if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
-                        System.out.print("Which token do you want to play? \n Your options :     ");
-                        System.out.println(game.possibleMoves(diceResult));
-                        option = scanner.nextInt();
-                    } else {
-                        int bestOption = AIPlayer.bestOption(game.possibleMoves(diceResult));
+                var p = game.possibleMoves(diceResult);// { cheat
+                if (p.size() == 1) {
+                    option = p.get(0);
+                } else {
+                if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
+                    System.out.print("Which token do you want to play? \n Your options :     ");
+                    System.out.println(game.possibleMoves(diceResult));
+                    option = scanner.nextInt();
+                } else {
+                    int bestOption = AIPlayer.bestOption(game.possibleMoves(diceResult));
 
-                        System.out.println("CPU choose:\t" + bestOption + "\nfrom his options:\t" + game.possibleMoves(diceResult));
-//                    System.out.println("the score:  "+AIPlayer.evaluateGame(game));
+                    System.out.println("CPU choose:\t" + bestOption + "\nfrom his options:\t" + game.possibleMoves(diceResult));
 
-                        option = bestOption;
-                    }
-//                }
+                    option = bestOption;
+                }
+                }
 
                 canMove = game.canMove(option, diceResult, false);
                 if (!canMove) {
@@ -74,12 +70,13 @@ public class Play {
 
 
         }
-        if (game.board.players[game.currentPlayerIndex].emptyWiningBlocks()==0)
-        System.out.println(STR."!!!___\{game.board.players[game.currentPlayerIndex].getRole()} Wins ___!!!");
-        else
-            System.out.println(STR."!!!___\{game.board.players[(game.currentPlayerIndex + 1) % 2].getRole()} Wins ___!!!");
+        for (Player player : game.board.players) {
+            if (player.emptyWiningBlocks() == 0) {
+                System.out.println("!!!___" + player.getRole() + " Wins ___!!!");
+                break;
+            }
+        }
         game.board.printBoard();
-
 
     }
 
