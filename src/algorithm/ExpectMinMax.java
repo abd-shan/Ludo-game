@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class ExpectMinMax {
     Game game;
-    final static int DEPTH = 5;
+    final static int DEPTH = 3;
 
     public ExpectMinMax(Game game) {
         this.game = game;
@@ -28,18 +28,19 @@ public class ExpectMinMax {
 
             for (int dice = 1; dice <= 6; dice++) {
                 Game simulatedGame = simulateGame(move, dice, game);
-                double score = (1.0 / 6) * expectiminimax(simulatedGame, dice, DEPTH, true, move);
+                double minMax=expectiminimax(simulatedGame, dice, DEPTH, true, move);
+                double score = (1.0 / 6) * minMax;
                 totalScore += score;
-//                System.out.println(expectiminimax(simulatedGame, dice, DEPTH, true, move));
+                System.out.println(minMax);
             }
 
             if (totalScore > bestScore) {
                 bestScore = totalScore;
                 bestMove = move;
             }
-//            System.out.println("totalScore: " + totalScore);
+            System.out.println("totalScore: " + totalScore);
         }
-//        System.out.println("bestMove: " + bestScore);
+        System.out.println("bestMove: " + bestScore);
 
         return bestMove;
     }
@@ -57,7 +58,7 @@ public class ExpectMinMax {
                 double probability = 1.0 / 6;
                 Game childGame = simulateGame(option, diceRoll, game);
 
-                    String nextNodeType = (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) ? "Min" : "Max";
+//                    String nextNodeType = (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) ? "Min" : "Max";
                 expectedValue += probability * expectiminimax(childGame, resultDice, depth - 1, false, option);
             }
 
@@ -100,30 +101,48 @@ public class ExpectMinMax {
 
     private double scorePlayer(Player player) {
         double score = 0;
-            for (int token : player.getTokens()) {
-                if (token > 0) {
-                    score += 700;
-                    if (player.getRole() == Role.Player) {
-                        score += token ;
-                        if (token >=23-(4-player.emptyWiningBlocks()) && token <=25) //هون  0_0
-                            score += 1000 ;
-                    } else {
-                        if (token <= 12)
-                            score += (token + 12) ;
-                        else
-                            score += (token - 12) ;
-                        if (token >=10-(4-player.emptyWiningBlocks()) && token <=12) //هون  0_0
-                            score += 1000 ;
-                    }
-                }
-                if (isSave(token)) {
-                    score += 20;
-                }
-                if (player.emptyWiningBlocks() < 4) {
-                    score += (4 - player.emptyWiningBlocks()) * 1500;
-                }
-//                if (isWall(player.getTokens())) score += 10;
+
+        if (player.emptyWiningBlocks()==0)
+            score += 1000;
+
+
+        if (player.getRole()==Role.Player)
+        {
+
+            for (int token:player.getTokens()){
+                if (token>0)score += 100;
+
+                if (token>=23 - (4-player.emptyWiningBlocks()) && token<=25)
+                    score +=90;
+
+             if (isSave(token))
+                 score +=10;
+
             }
+        }
+        else {
+            for (int token:player.getTokens()){
+
+                if (token>0)score += 600;
+
+                if (token>=10 - (4-player.emptyWiningBlocks()) && token<=12)
+                    score +=399;
+
+                if (token>=13 )
+                    score -=500;
+
+
+                if (isSave(token))
+                    score +=10;
+
+                score += (4- player.emptyWiningBlocks())*5000;
+
+
+
+            }
+
+        }
+
         return score;
     }
 
