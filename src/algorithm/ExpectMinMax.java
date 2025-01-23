@@ -28,7 +28,7 @@ public class ExpectMinMax {
 
             for (int dice = 1; dice <= 6; dice++) {
                 Game simulatedGame = simulateGame(move, dice, game);
-                double minMax=expectiminimax(simulatedGame, dice, DEPTH, true, move);
+                double minMax = expectiminimax(simulatedGame, dice, DEPTH, true, move);
                 double score = (1.0 / 6) * minMax;
                 totalScore += score;
 //                System.out.println(minMax);
@@ -102,41 +102,40 @@ public class ExpectMinMax {
     private double scorePlayer(Player player) {
         double score = 0;
 
-        if (player.emptyWiningBlocks()==0)
-            score += 1000;
+        if (player.emptyWiningBlocks() == 0)
+            score += 100000;
 
 
-        if (player.getRole()==Role.Player)
-        {
+        if (player.getRole() == Role.Player) {
 
-            for (int token:player.getTokens()){
-                if (token>0)score += 100;
+            for (int token : player.getTokens()) {
+                if (token > 0) score += 100;
 
-                if (token>=23 - (4-player.emptyWiningBlocks()) && token<=25)
-                    score +=90;
+//                if (token>=23 - (4-player.emptyWiningBlocks()) && token<=25)
+//                    score +=90;
 
-             if (isSave(token))
-                 score +=10;
+                if (isSave(token))
+                    score += 10;
 
             }
-        }
-        else {
-            for (int token:player.getTokens()){
+        } else {
+            for (int token : player.getTokens()) {
 
-                if (token>0)score += 600;
+                if (token > 0) score += 600;
 
-                if (token>=10 - (4-player.emptyWiningBlocks()) && token<=12)
-                    score +=399;
+//                if (token>=10 - (4-player.emptyWiningBlocks()) && token<=12)
+//                    score +=399;
+                if (token > 8 && token < 13)
+                    score += token * 100;
 
-                if (token>=13 )
-                    score -=500;
+                if (token >= 13)
+                    score -= 500;
 
 
                 if (isSave(token))
-                    score +=10;
+                    score += 10;
 
-                score += (4- player.emptyWiningBlocks())*5000;
-
+                score += (4 - player.emptyWiningBlocks()) * 5000;
 
 
             }
@@ -146,7 +145,7 @@ public class ExpectMinMax {
         return score;
     }
 
-    boolean isWall(int[] tokens){
+    boolean isWall(int[] tokens) {
         Set<Integer> set = new HashSet<>();
         for (int token : tokens) {
             if (set.contains(token))

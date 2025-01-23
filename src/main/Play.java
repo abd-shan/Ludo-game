@@ -43,10 +43,10 @@ public class Play {
                 ExpectMinMax AIPlayer = new ExpectMinMax(game);
 
 
-                var p = game.possibleMoves(diceResult);// { cheat
-                if (p.size() == 1) {
-                    option = p.get(0);
-                } else {
+//                var p = game.possibleMoves(diceResult);// { cheat
+//                if (p.size() == 1) {
+//                    option = p.get(0);
+//                } else {
                 if (game.board.players[game.currentPlayerIndex].getRole() == Role.Player) {
                     System.out.print("Which token do you want to play? \n Your options :     ");
                     System.out.println(game.possibleMoves(diceResult));
@@ -58,7 +58,7 @@ public class Play {
 
                     option = bestOption;
                 }
-                }
+//                }
 
                 canMove = game.canMove(option, diceResult, false);
                 if (!canMove) {
