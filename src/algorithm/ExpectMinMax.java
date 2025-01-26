@@ -1,6 +1,5 @@
 package algorithm;
 
-import game.Board;
 import game.Game;
 import game.Player;
 import game.Role;
@@ -106,30 +105,31 @@ public class ExpectMinMax {
             score += 100000;
 
 
-        if (player.getRole() == Role.Player) {
-
+//        if (player.getRole() == Role.Player) {
+//
+//            for (int token : player.getTokens()) {
+////                if (token > 0) score += 100;
+//
+////                if (token>=23 - (4-player.emptyWiningBlocks()) && token<=25)
+////                    score +=90;
+//
+//                if (isSave(token))
+//                    score += 10;
+//
+//            }
+//        } else
+        if (player.getRole() == Role.CPU) {
             for (int token : player.getTokens()) {
-                if (token > 0) score += 100;
 
-//                if (token>=23 - (4-player.emptyWiningBlocks()) && token<=25)
-//                    score +=90;
-
-                if (isSave(token))
-                    score += 10;
-
-            }
-        } else {
-            for (int token : player.getTokens()) {
-
-                if (token > 0) score += 600;
+                if (token > 0) score += 1000;
 
 //                if (token>=10 - (4-player.emptyWiningBlocks()) && token<=12)
 //                    score +=399;
                 if (token > 8 && token < 13)
                     score += token * 100;
 
-                if (token >= 13)
-                    score -= 500;
+//                if (token >= 13)
+//                    score -= 5000;
 
 
                 if (isSave(token))
